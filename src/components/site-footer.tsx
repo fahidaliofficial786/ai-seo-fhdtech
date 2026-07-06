@@ -158,19 +158,21 @@ export function SiteFooter() {
           <div className="flex flex-col gap-4 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
             <p>© {new Date().getFullYear()} FHDTech · aiseo.fhdtech.com. All rights reserved.</p>
             <div className="flex flex-wrap gap-x-4 gap-y-1">
-              <span className="hover:text-primary cursor-pointer transition-colors">
+              <Link to="/privacy" className="hover:text-primary transition-colors">
                 Privacy Policy
-              </span>
+              </Link>
               <span>·</span>
-              <span className="hover:text-primary cursor-pointer transition-colors">
+              <Link to="/terms" className="hover:text-primary transition-colors">
                 Terms of Service
-              </span>
+              </Link>
               <span>·</span>
-              <span className="hover:text-primary cursor-pointer transition-colors">Cookies</span>
+              <Link to="/cookies" className="hover:text-primary transition-colors">
+                Cookies
+              </Link>
               <span>·</span>
-              <span className="hover:text-primary cursor-pointer transition-colors">
+              <Link to="/disclaimer" className="hover:text-primary transition-colors">
                 Disclaimer
-              </span>
+              </Link>
             </div>
           </div>
         </div>
