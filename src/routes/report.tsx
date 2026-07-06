@@ -22,6 +22,8 @@ import {
   Hash,
   Image,
   Link2,
+  Smartphone,
+  Monitor,
 } from "lucide-react";
 import { z } from "zod";
 import { PageShell } from "@/components/page-shell";
@@ -411,9 +413,10 @@ function PriorityFixes({ data }: { data: AuditResult }) {
 }
 
 function PageSpeedDashboard({ data }: { data: AuditResult }) {
-  if (!data.pageSpeed) return null;
+  const [strategy, setStrategy] = useState<"mobile" | "desktop">("mobile");
 
-  const { scores, metrics } = data.pageSpeed;
+  if (!data.pageSpeed) return null;
+  const currentData = data.pageSpeed[strategy];
 
   const scoreClass = (score: number) => {
     if (score >= 90) return "text-chart-3 border-chart-3/20 bg-chart-3/5"; // green
@@ -429,20 +432,46 @@ function PageSpeedDashboard({ data }: { data: AuditResult }) {
 
   return (
     <div className="rounded-3xl border border-border bg-card/50 p-6 sm:p-8 space-y-6">
-      <div>
-        <h3 className="text-xl font-bold">Google PageSpeed Insights</h3>
-        <p className="text-sm text-muted-foreground mt-1">
-          Real-time Lighthouse audit scores and Core Web Vitals speed metrics.
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h3 className="text-xl font-bold">Google PageSpeed Insights</h3>
+          <p className="text-sm text-muted-foreground mt-1">
+            Real-time Lighthouse audit scores and Core Web Vitals speed metrics.
+          </p>
+        </div>
+
+        {/* Strategy switcher tabs */}
+        <div className="inline-flex rounded-xl bg-muted p-1 self-start sm:self-center">
+          <button
+            onClick={() => setStrategy("mobile")}
+            className={`flex items-center gap-1.5 rounded-lg px-4 py-1.5 text-xs font-semibold transition-all ${
+              strategy === "mobile"
+                ? "bg-background text-foreground shadow"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            <Smartphone className="h-3.5 w-3.5" /> Mobile
+          </button>
+          <button
+            onClick={() => setStrategy("desktop")}
+            className={`flex items-center gap-1.5 rounded-lg px-4 py-1.5 text-xs font-semibold transition-all ${
+              strategy === "desktop"
+                ? "bg-background text-foreground shadow"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            <Monitor className="h-3.5 w-3.5" /> Desktop
+          </button>
+        </div>
       </div>
 
       {/* Circle Gauges */}
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         {[
-          { label: "Performance", score: scores.performance },
-          { label: "Accessibility", score: scores.accessibility },
-          { label: "Best Practices", score: scores.bestPractices },
-          { label: "SEO", score: scores.seo },
+          { label: "Performance", score: currentData.scores.performance },
+          { label: "Accessibility", score: currentData.scores.accessibility },
+          { label: "Best Practices", score: currentData.scores.bestPractices },
+          { label: "SEO", score: currentData.scores.seo },
         ].map((item) => (
           <div
             key={item.label}
@@ -459,25 +488,33 @@ function PageSpeedDashboard({ data }: { data: AuditResult }) {
         {[
           {
             label: "First Contentful Paint (FCP)",
-            val: metrics.fcp.value,
-            score: metrics.fcp.score,
+            val: currentData.metrics.fcp.value,
+            score: currentData.metrics.fcp.score,
           },
           {
             label: "Largest Contentful Paint (LCP)",
-            val: metrics.lcp.value,
-            score: metrics.lcp.score,
+            val: currentData.metrics.lcp.value,
+            score: currentData.metrics.lcp.score,
           },
           {
             label: "Cumulative Layout Shift (CLS)",
-            val: metrics.cls.value,
-            score: metrics.cls.score,
+            val: currentData.metrics.cls.value,
+            score: currentData.metrics.cls.score,
           },
-          { label: "Total Blocking Time (TBT)", val: metrics.tbt.value, score: metrics.tbt.score },
-          { label: "Speed Index", val: metrics.speedIndex.value, score: metrics.speedIndex.score },
+          {
+            label: "Total Blocking Time (TBT)",
+            val: currentData.metrics.tbt.value,
+            score: currentData.metrics.tbt.score,
+          },
+          {
+            label: "Speed Index",
+            val: currentData.metrics.speedIndex.value,
+            score: currentData.metrics.speedIndex.score,
+          },
           {
             label: "Time to Interactive (TTI)",
-            val: metrics.interactive.value,
-            score: metrics.interactive.score,
+            val: currentData.metrics.interactive.value,
+            score: currentData.metrics.interactive.score,
           },
         ].map((m) => (
           <div

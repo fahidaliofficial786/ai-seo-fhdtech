@@ -24,6 +24,23 @@ export interface DetectedPlatform {
   signal: string;
 }
 
+export interface PageSpeedStrategyResult {
+  scores: {
+    performance: number;
+    accessibility: number;
+    bestPractices: number;
+    seo: number;
+  };
+  metrics: {
+    fcp: { value: string; score: number };
+    lcp: { value: string; score: number };
+    cls: { value: string; score: number };
+    tbt: { value: string; score: number };
+    speedIndex: { value: string; score: number };
+    interactive: { value: string; score: number };
+  };
+}
+
 export interface AuditResult {
   url: string;
   finalUrl: string;
@@ -77,19 +94,7 @@ export interface AuditResult {
     inH1: boolean;
   };
   pageSpeed?: {
-    scores: {
-      performance: number;
-      accessibility: number;
-      bestPractices: number;
-      seo: number;
-    };
-    metrics: {
-      fcp: { value: string; score: number };
-      lcp: { value: string; score: number };
-      cls: { value: string; score: number };
-      tbt: { value: string; score: number };
-      speedIndex: { value: string; score: number };
-      interactive: { value: string; score: number };
-    };
+    mobile: PageSpeedStrategyResult;
+    desktop: PageSpeedStrategyResult;
   };
 }
