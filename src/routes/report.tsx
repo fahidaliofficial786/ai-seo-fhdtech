@@ -46,6 +46,7 @@ export const Route = createFileRoute("/report")({
       },
       { name: "robots", content: "noindex, follow" },
     ],
+    links: [{ rel: "canonical", href: "https://aiseo.fhdtech.com/report" }],
   }),
 });
 
