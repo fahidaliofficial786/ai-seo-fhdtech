@@ -8,6 +8,7 @@ import {
   AlertTriangle,
   Info,
   ArrowLeft,
+  ArrowRight,
   Loader2,
   Gauge,
   TrendingUp,
@@ -174,6 +175,27 @@ function Report() {
                   <Estimate icon={Clock} label="Est. fix time" value={data.estimates.fixTime} />
                 </div>
               </div>
+            </div>
+
+            {/* AI Automated Estimate Disclaimer / Notice Card */}
+            <div className="rounded-2xl border border-primary/20 bg-primary/5 p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <Bot className="h-5 w-5" />
+                </div>
+                <div className="text-left">
+                  <p className="text-sm font-semibold">AI Automated Estimate Notice</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    This report is an automated check. For a comprehensive human SEO audit and
+                    indexing verification, book a free session.
+                  </p>
+                </div>
+              </div>
+              <a href="/contact" className="shrink-0 w-full sm:w-auto">
+                <Button size="sm" className="w-full gap-1.5">
+                  Book Free Human Review <ArrowRight className="h-4 w-4" />
+                </Button>
+              </a>
             </div>
 
             {/* Detection */}

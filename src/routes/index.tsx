@@ -411,6 +411,69 @@ function Index() {
         </div>
       </section>
 
+      {/* Human Review vs AI Estimate Section */}
+      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
+        <div className="rounded-3xl border border-border bg-gradient-to-r from-primary/10 via-transparent to-primary/5 p-8 sm:p-12">
+          <div className="grid gap-8 lg:grid-cols-2 items-center">
+            <div>
+              <span className="rounded-full bg-primary/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary">
+                Human Expert Review
+              </span>
+              <h2 className="mt-4 text-3xl font-bold leading-tight sm:text-4xl">
+                AI Estimates are great. <br />
+                <span className="gradient-text">Human Review is definitive.</span>
+              </h2>
+              <p className="mt-4 text-muted-foreground">
+                Automated scanners check standard tags and code structures. However, true SEO
+                success requires human evaluation of context, user intent, search intent alignment,
+                and actual crawler indexes.
+              </p>
+              <div className="mt-6 space-y-3">
+                {[
+                  "Manual indexing check on Google Search Console",
+                  "Expert review of entity clarity and structured data",
+                  "Custom ranking and backlink strategy tailored to your niche",
+                  "Verification of AI crawler accessibility and llms.txt alignment",
+                ].map((feat) => (
+                  <div
+                    key={feat}
+                    className="flex items-center gap-2.5 text-sm text-muted-foreground"
+                  >
+                    <CheckCircle2 className="h-4.5 w-4.5 text-primary shrink-0" />
+                    <span>{feat}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="rounded-2xl border border-border bg-background/50 p-6 sm:p-8 flex flex-col justify-center text-center">
+              <Bot className="mx-auto h-12 w-12 text-primary animate-pulse" />
+              <h3 className="mt-4 text-lg font-bold">Request a Manual Review</h3>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Book a free 30-minute meeting to go through your site's audit results with our
+                senior SEO expert and get a manual audit checklist.
+              </p>
+              <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+                <a href="/contact" className="w-full sm:w-auto">
+                  <Button className="w-full gap-1.5">
+                    Book Free Human Review <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </a>
+                <a
+                  href={CONTACT.whatsapp}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-full sm:w-auto"
+                >
+                  <Button variant="outline" className="w-full">
+                    Chat on WhatsApp
+                  </Button>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* FAQ preview */}
       <section className="mx-auto max-w-3xl px-4 pb-24 sm:px-6">
         <SectionHead eyebrow="FAQ" title="Common questions" />
