@@ -27,8 +27,12 @@ export const generateAiPlan = createServerFn({ method: "POST" })
     };
   })
   .handler(async ({ data }): Promise<AiPlanResult> => {
-    const key = process.env.LOVABLE_API_KEY;
-    if (!key) return { ok: false, error: "AI is not configured." };
+    const lovableKey = process.env.LOVABLE_API_KEY;
+    const geminiKey = process.env.GEMINI_API_KEY;
+
+    if (!lovableKey && !geminiKey) {
+      return { ok: false, error: "AI is not configured. Please add GEMINI_API_KEY in settings." };
+    }
 
     const failing = data.issues.filter((i) => i.status !== "pass");
     const issueList = failing
@@ -49,13 +53,41 @@ Return ONLY minified JSON matching this shape:
 Give 4 to 7 steps, ordered by impact. No markdown, no code fences.`;
 
     try {
-      const { createLovableAiGatewayProvider } = await import("./ai-gateway.server");
-      const { generateText } = await import("ai");
-      const gateway = createLovableAiGatewayProvider(key);
-      const { text } = await generateText({
-        model: gateway("google/gemini-2.5-flash"),
-        prompt,
-      });
+      let text = "";
+      if (geminiKey) {
+        // Direct call to Google Gemini API (no external sdk required, works natively on Edge/Cloudflare)
+        const res = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: prompt }] }],
+              generationConfig: {
+                responseMimeType: "application/json",
+              },
+            }),
+          },
+        );
+        if (!res.ok) {
+          throw new Error(`Gemini API returned status ${res.status}`);
+        }
+        const resultJson = await res.json();
+        text = resultJson?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+      } else {
+        // Fallback to Lovable Gateway
+        const { createLovableAiGatewayProvider } = await import("./ai-gateway.server");
+        const { generateText } = await import("ai");
+        const gateway = createLovableAiGatewayProvider(lovableKey!);
+        const response = await generateText({
+          model: gateway("google/gemini-2.5-flash"),
+          prompt,
+        });
+        text = response.text;
+      }
+
       const clean = text
         .replace(/```json/gi, "")
         .replace(/```/g, "")
