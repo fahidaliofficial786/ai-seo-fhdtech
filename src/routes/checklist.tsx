@@ -225,45 +225,143 @@ function Checklist() {
 function PromptSection() {
   const [copied, setCopied] = useState(false);
 
-  const promptText = `Act as an expert SEO Consultant and Web Developer. I need you to optimize my website's code, structure, and content to meet the following industry-standard SEO, PageSpeed, and Crawler optimization guidelines:
+  const promptText = `SEO Optimization Prompt
 
-1. AI & LLM SEO:
-   - Create and configure a valid 'llms.txt' and 'ai.txt' file at the root to guide LLM crawlers.
-   - Optimize headings and paragraphs for direct Q&A style to secure AI citations and Answer Snippets.
-   - Harden robots.txt rules to configure permissions for GPTBot, ClaudeBot, and PerplexityBot.
-   - Implement clean semantic HTML elements (header, nav, main, section, article, footer) for machine parsing.
+Your task is to fully optimize this website for modern SEO. Perform a complete audit and implement improvements directly wherever possible. Do not just generate a report—apply the fixes while preserving the existing design, layout, functionality, branding, and user experience.
 
-2. Technical SEO:
-   - Build a correct robots.txt and XML sitemap index.
-   - Implement Canonical Tags on all pages to prevent duplicate content indexing.
-   - Clean up redirect chains and ensure all links return a clean HTTP 200 OK or appropriate 301 redirects.
-   - Enforce HTTPS and eliminate mixed content warnings.
+Follow every checklist below without skipping any item.
 
-3. On-Page SEO:
-   - Craft SEO titles (50-60 characters) and meta descriptions (150-160 characters) containing natural primary keywords.
-   - Enforce a strict hierarchical heading outline (one single H1 tag per page, followed by H2, H3).
-   - Maintain keyword density between 0.5% and 2.5%, avoiding keyword stuffing.
-   - Build a contextual internal linking structure using descriptive anchor texts.
+AI & LLM SEO
+llms.txt
+ai.txt
+LLM sitemap
+GPTBot access
+ClaudeBot access
+PerplexityBot access
+Google-Extended
+Citation readiness
+Entity optimization
+Answer snippets
+Semantic HTML
+Question detection
 
-4. Schema & Rich Results:
-   - Inject valid JSON-LD structured data (Organization, Website, FAQ, Article, LocalBusiness, and Breadcrumb).
-   - Verify structured data syntax and ensure eligibility for Google Rich Results.
+Technical SEO
+robots.txt
+XML sitemap
+Sitemap index
+Crawl depth
+Canonical tags
+Redirect chains
+HTTP status
+404 / Soft 404
+Duplicate URLs
+HTTPS
+Mixed content
+WWW redirect
+Indexability
+Noindex
+Hreflang
+Orphan pages
 
-5. Performance & Core Web Vitals:
-   - Optimize Largest Contentful Paint (LCP < 2.5s) and Cumulative Layout Shift (CLS < 0.1).
-   - Defer unused JavaScript/CSS, eliminate render-blocking resources, and leverage browser caching.
-   - Enable Brotli/Gzip compression and utilize a Content Delivery Network (CDN).
+On-Page SEO
+Title length & pixel optimization
+Meta descriptions
+Heading structure
+Missing or multiple H1 tags
+Keyword density
+Keyword stuffing prevention
+Content depth
+Word count optimization
+Readability improvement
+Internal linking
+Anchor text optimization
+Broken links
 
-6. Security & HTTPS:
-   - Enforce strong HSTS headers, secure referrer policies, and Content Security Policies (CSP).
-   - Harden session cookies by marking them as Secure and HttpOnly.
+Schema & Rich Results
+Organization
+Website
+Product
+FAQ
+Review
+Article
+LocalBusiness
+Breadcrumb
+HowTo
+Event
+VideoObject
+JSON-LD validation
+Rich Result eligibility
 
-7. Accessibility & Social:
-   - Implement descriptive ALT text on all images for screen-readers and image SEO.
-   - Ensure a color contrast ratio of at least 4.5:1 for text overlays.
-   - Integrate Open Graph (OG) and Twitter Card tags to ensure premium rendering on Facebook, Twitter, LinkedIn, and messaging platforms.
+Performance & Core Web Vitals
+LCP
+CLS
+INP
+TTFB
+FCP
+Speed Index
+Total Blocking Time
+Remove unused JavaScript & CSS
+Eliminate render-blocking resources
+Compression
+Browser caching
+Minification
+CDN optimization
+HTTP/2 & HTTP/3
 
-Please analyze my website structure and provide the precise code snippets, configuration files, and content formatting suggestions to achieve perfect scores on these items.`;
+Security
+HTTPS
+SSL
+HSTS
+CSP
+XSS protection
+Clickjacking protection
+Security headers
+Referrer Policy
+Permissions Policy
+Cookie security
+Mixed content
+
+Accessibility
+ARIA attributes
+Color contrast
+Keyboard navigation
+Labels
+Form accessibility
+Alt text
+Zoom support
+Accessibility score improvement
+
+Social & Sharing
+Open Graph
+Facebook preview
+Twitter Cards
+LinkedIn preview
+Discord preview
+Slack preview
+WhatsApp preview
+Telegram preview
+Pinterest metadata
+
+Content Quality & E-E-A-T
+Duplicate content
+Thin content
+AI-generated content detection
+Human readability
+Author information
+Contact page
+Privacy Policy
+Terms & Conditions
+About page
+
+Requirements
+- Preserve the current UI/UX and functionality.
+- Do not remove or break any existing feature.
+- Apply SEO best practices throughout the website.
+- Ensure all pages are fully crawlable and indexable where appropriate.
+- Optimize for Google Search, Google AI Overviews, ChatGPT, Claude, Gemini, Perplexity, and other LLM-based search engines.
+- Improve semantic HTML, structured data, internal linking, metadata, page performance, and content quality.
+- Use only modern, production-ready SEO techniques that comply with Google's latest best practices.
+- At the end, provide a summary of every optimization completed, any remaining issues, and an overall SEO score with category-wise scores.`;
 
   const copy = () => {
     navigator.clipboard.writeText(promptText);
