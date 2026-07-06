@@ -1,0 +1,23 @@
+# ai.txt - AI Crawler Permissions for aiseo.fhdtech.com
+# Specification format: https://github.com/dreadnought/ai.txt
+
+User-agent: *
+Permissions:
+  Indexing: allowed
+  Scraping: allowed
+  Training: disallowed
+
+User-agent: GPTBot
+Permissions:
+  Indexing: allowed
+  Scraping: allowed
+
+User-agent: ClaudeBot
+Permissions:
+  Indexing: allowed
+  Scraping: allowed
+
+User-agent: PerplexityBot
+Permissions:
+  Indexing: allowed
+  Scraping: allowed

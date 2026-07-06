@@ -1,17 +1,27 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Menu, X, MessageCircle } from "lucide-react";
+import {
+  Menu,
+  X,
+  MessageCircle,
+  Home,
+  ClipboardCheck,
+  BookOpen,
+  HelpCircle,
+  User,
+  Mail,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CONTACT } from "@/lib/site-data";
 import logo from "@/assets/logo.png";
 
 const NAV = [
-  { to: "/", label: "Home" },
-  { to: "/checklist", label: "Checklist" },
-  { to: "/guide", label: "AI SEO Guide" },
-  { to: "/faq", label: "FAQ" },
-  { to: "/about", label: "About" },
-  { to: "/contact", label: "Contact" },
+  { to: "/", label: "Home", icon: Home },
+  { to: "/checklist", label: "Checklist", icon: ClipboardCheck },
+  { to: "/guide", label: "AI SEO Guide", icon: BookOpen },
+  { to: "/faq", label: "FAQ", icon: HelpCircle },
+  { to: "/about", label: "About", icon: User },
+  { to: "/contact", label: "Contact", icon: Mail },
 ] as const;
 
 export function SiteHeader() {
@@ -33,15 +43,19 @@ export function SiteHeader() {
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex">
-          {NAV.map((n) => (
-            <Link
-              key={n.to}
-              to={n.to}
-              className="rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground [&.active]:text-foreground"
-            >
-              {n.label}
-            </Link>
-          ))}
+          {NAV.map((n) => {
+            const Icon = n.icon;
+            return (
+              <Link
+                key={n.to}
+                to={n.to}
+                className="flex items-center gap-1.5 rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground [&.active]:text-foreground"
+              >
+                <Icon className="h-4 w-4 shrink-0" />
+                <span>{n.label}</span>
+              </Link>
+            );
+          })}
         </nav>
 
         <div className="hidden items-center gap-2 md:flex">
@@ -61,17 +75,21 @@ export function SiteHeader() {
       </div>
 
       {open && (
-        <div className="border-t border-border bg-background/95 px-4 py-3 md:hidden">
-          {NAV.map((n) => (
-            <Link
-              key={n.to}
-              to={n.to}
-              onClick={() => setOpen(false)}
-              className="block rounded-md px-3 py-2 text-sm text-muted-foreground hover:text-foreground"
-            >
-              {n.label}
-            </Link>
-          ))}
+        <div className="border-t border-border bg-background/95 px-4 py-3 md:hidden space-y-1">
+          {NAV.map((n) => {
+            const Icon = n.icon;
+            return (
+              <Link
+                key={n.to}
+                to={n.to}
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-muted-foreground hover:text-foreground [&.active]:text-foreground"
+              >
+                <Icon className="h-4 w-4 shrink-0" />
+                <span>{n.label}</span>
+              </Link>
+            );
+          })}
           <a
             href={CONTACT.whatsapp}
             target="_blank"

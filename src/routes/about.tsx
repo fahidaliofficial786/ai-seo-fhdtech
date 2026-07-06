@@ -47,6 +47,22 @@ export const Route = createFileRoute("/about")({
             "Portfolio and biography of Fahid Ali, web developer and automation specialist.",
         }),
       },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Home", item: "https://aiseo.fhdtech.com/" },
+            {
+              "@type": "ListItem",
+              position: 2,
+              name: "About",
+              item: "https://aiseo.fhdtech.com/about",
+            },
+          ],
+        }),
+      },
     ],
   }),
   component: About,
