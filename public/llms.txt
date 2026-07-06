@@ -1,0 +1,11 @@
+# AI SEO Audit — FHDTech
+
+> The world's most comprehensive SEO audit platform for AI-generated websites. Audit, analyze, monitor and optimize the SEO and AI-search visibility of sites built with Lovable, Bolt, V0, Cursor, Replit, Vercel and more.
+
+## Pages
+- [Home / Free Scanner](https://aiseo.fhdtech.com/): Run a free AI website SEO audit.
+- [SEO Checklist](https://aiseo.fhdtech.com/checklist): 100+ SEO, AI, performance, security and accessibility checks.
+- [AI SEO Guide](https://aiseo.fhdtech.com/guide): How to rank in ChatGPT, Gemini, Claude and Perplexity.
+- [FAQ](https://aiseo.fhdtech.com/faq): Common questions about AI website SEO.
+- [About](https://aiseo.fhdtech.com/about): About FHDTech.
+- [Contact](https://aiseo.fhdtech.com/contact): Book a free AI SEO consultation.
