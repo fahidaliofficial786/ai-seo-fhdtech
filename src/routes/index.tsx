@@ -103,14 +103,14 @@ function Index() {
         <div className="relative mx-auto max-w-4xl px-4 pb-16 pt-20 text-center sm:px-6 sm:pt-28">
           <div className="mx-auto mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-1.5 text-xs text-muted-foreground shadow-sm backdrop-blur">
             <Sparkles className="h-3.5 w-3.5 text-primary" />
-            The world's most comprehensive AI Website SEO Audit
+            The world's most comprehensive PageSpeed & SEO Audit
           </div>
           <h1 className="text-balance text-4xl font-bold leading-tight sm:text-6xl">
-            AI Website <span className="gradient-text">SEO Audit</span> &amp; Free Scanner
+            Website <span className="gradient-text">PageSpeed &amp; SEO</span> Audit Scanner
           </h1>
           <p className="mx-auto mt-5 max-w-2xl text-pretty text-base text-muted-foreground sm:text-lg">
-            Scan Lovable, Bolt, V0, Cursor, Replit, Vercel &amp; AI-generated websites in seconds.
-            100+ checks across SEO, AI search, performance, security &amp; accessibility.
+            Scan any website URL in seconds and retrieve real-time Google PageSpeed Insights and SEO
+            quality reports.
           </p>
           <div className="mx-auto mt-8 max-w-2xl">
             <ScanForm />
@@ -123,7 +123,7 @@ function Index() {
               <CheckCircle2 className="h-4 w-4 text-chart-3" /> Instant results
             </span>
             <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="h-4 w-4 text-chart-3" /> AI search ready
+              <CheckCircle2 className="h-4 w-4 text-chart-3" /> Real Google PageSpeed data
             </span>
           </div>
         </div>
@@ -301,8 +301,8 @@ function Index() {
           <FileSearch className="mx-auto h-10 w-10 text-primary" />
           <h2 className="mt-4 text-3xl font-bold">Run a live audit right now</h2>
           <p className="mt-3 text-muted-foreground">
-            Paste any AI-generated website and get an instant, detailed report with scores, priority
-            fixes and impact estimates.
+            Paste any website URL and get an instant, detailed report with scores, priority fixes
+            and impact estimates.
           </p>
           <div className="mx-auto mt-8 max-w-xl">
             <ScanForm />
@@ -393,10 +393,10 @@ function Index() {
       <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6">
         <div className="mx-auto mb-8 max-w-2xl text-center">
           <Zap className="mx-auto h-9 w-9 text-primary" />
-          <h2 className="mt-4 text-3xl font-bold">Book a free AI website SEO consultation</h2>
+          <h2 className="mt-4 text-3xl font-bold">Book a free website SEO consultation</h2>
           <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
-            Pick a 30-minute slot below. We'll review your AI-built site live and map out exactly
-            what to fix first.
+            Pick a 30-minute slot below. We'll review your site's PageSpeed & SEO live and map out
+            exactly what to fix first.
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
             <a href={CONTACT.whatsapp} target="_blank" rel="noreferrer">
@@ -411,7 +411,7 @@ function Index() {
         </div>
       </section>
 
-      {/* Human Review vs AI Estimate Section */}
+      {/* Human Review vs Automated Estimate Section */}
       <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
         <div className="rounded-3xl border border-border bg-gradient-to-r from-primary/10 via-transparent to-primary/5 p-8 sm:p-12">
           <div className="grid gap-8 lg:grid-cols-2 items-center">
@@ -420,13 +420,13 @@ function Index() {
                 Human Expert Review
               </span>
               <h2 className="mt-4 text-3xl font-bold leading-tight sm:text-4xl">
-                AI Estimates are great. <br />
+                Automated Audits are great. <br />
                 <span className="gradient-text">Human Review is definitive.</span>
               </h2>
               <p className="mt-4 text-muted-foreground">
                 Automated scanners check standard tags and code structures. However, true SEO
                 success requires human evaluation of context, user intent, search intent alignment,
-                and actual crawler indexes.
+                and actual indexing status.
               </p>
               <div className="mt-6 space-y-3">
                 {[

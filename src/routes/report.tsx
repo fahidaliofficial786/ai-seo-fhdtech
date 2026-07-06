@@ -29,7 +29,6 @@ import { ScoreRing } from "@/components/score-ring";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { auditWebsite } from "@/lib/audit.functions";
-import { generateAiPlan } from "@/lib/ai-plan.functions";
 import type { AuditCheck, CheckStatus, AuditResult } from "@/lib/audit-types";
 
 export const Route = createFileRoute("/report")({
@@ -177,14 +176,14 @@ function Report() {
               </div>
             </div>
 
-            {/* AI Automated Estimate Disclaimer / Notice Card */}
+            {/* Automated Scan Notice */}
             <div className="rounded-2xl border border-primary/20 bg-primary/5 p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="flex items-center gap-3">
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                  <Bot className="h-5 w-5" />
+                  <Gauge className="h-5 w-5" />
                 </div>
                 <div className="text-left">
-                  <p className="text-sm font-semibold">AI Automated Estimate Notice</p>
+                  <p className="text-sm font-semibold">Automated Scan Notice</p>
                   <p className="text-xs text-muted-foreground mt-0.5">
                     This report is an automated check. For a comprehensive human SEO audit and
                     indexing verification, book a free session.
@@ -197,6 +196,9 @@ function Report() {
                 </Button>
               </a>
             </div>
+
+            {/* PageSpeed Insights Dashboard */}
+            <PageSpeedDashboard data={data} />
 
             {/* Detection */}
             <div className="grid gap-6 md:grid-cols-2">
@@ -254,9 +256,6 @@ function Report() {
                 </div>
               ))}
             </div>
-
-            {/* AI action plan */}
-            <AiActionPlan data={data} />
 
             {/* Priority fixes */}
             <PriorityFixes data={data} />
@@ -411,99 +410,85 @@ function PriorityFixes({ data }: { data: AuditResult }) {
   );
 }
 
-const PRIORITY_STYLE: Record<string, string> = {
-  critical: "bg-destructive/10 text-destructive",
-  high: "bg-chart-4/10 text-chart-4",
-  medium: "bg-primary/10 text-primary",
-};
+function PageSpeedDashboard({ data }: { data: AuditResult }) {
+  if (!data.pageSpeed) return null;
 
-function AiActionPlan({ data }: { data: AuditResult }) {
-  const runPlan = useServerFn(generateAiPlan);
-  const [started, setStarted] = useState(false);
+  const { scores, metrics } = data.pageSpeed;
 
-  const mutation = useMutation({
-    mutationFn: () =>
-      runPlan({
-        data: {
-          url: data.finalUrl,
-          score: data.overallScore,
-          grade: data.grade,
-          platforms: data.platforms.map((p) => p.name),
-          issues: data.categories.flatMap((c) =>
-            c.checks.map((chk) => ({
-              label: chk.label,
-              status: chk.status,
-              impact: chk.impact,
-              category: c.name,
-            })),
-          ),
-        },
-      }),
-  });
+  const scoreClass = (score: number) => {
+    if (score >= 90) return "text-chart-3 border-chart-3/20 bg-chart-3/5"; // green
+    if (score >= 50) return "text-chart-4 border-chart-4/20 bg-chart-4/5"; // amber
+    return "text-destructive border-destructive/20 bg-destructive/5"; // red
+  };
 
-  const start = () => {
-    setStarted(true);
-    mutation.mutate();
+  const metricClass = (score: number) => {
+    if (score >= 0.9) return "text-chart-3 font-semibold";
+    if (score >= 0.5) return "text-chart-4 font-semibold";
+    return "text-destructive font-semibold";
   };
 
   return (
-    <div className="rounded-3xl border border-primary/30 bg-gradient-to-b from-primary/10 to-transparent p-6 sm:p-8">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
-          <Sparkles className="h-5 w-5 text-primary" />
-          <h3 className="text-lg font-semibold">AI-powered action plan</h3>
-        </div>
-        {!started && (
-          <Button onClick={start} className="gap-1.5">
-            <Zap className="h-4 w-4" /> Generate plan
-          </Button>
-        )}
-        {started && (mutation.isError || (mutation.data && !mutation.data.ok)) && (
-          <Button variant="outline" onClick={() => mutation.mutate()}>
-            Retry
-          </Button>
-        )}
+    <div className="rounded-3xl border border-border bg-card/50 p-6 sm:p-8 space-y-6">
+      <div>
+        <h3 className="text-xl font-bold">Google PageSpeed Insights</h3>
+        <p className="text-sm text-muted-foreground mt-1">
+          Real-time Lighthouse audit scores and Core Web Vitals speed metrics.
+        </p>
       </div>
 
-      {!started && (
-        <p className="mt-2 text-sm text-muted-foreground">
-          Let our AI read your full report and write a prioritised, plain-English fix plan tailored
-          to your site.
-        </p>
-      )}
+      {/* Circle Gauges */}
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+        {[
+          { label: "Performance", score: scores.performance },
+          { label: "Accessibility", score: scores.accessibility },
+          { label: "Best Practices", score: scores.bestPractices },
+          { label: "SEO", score: scores.seo },
+        ].map((item) => (
+          <div
+            key={item.label}
+            className={`flex flex-col items-center justify-center p-4 rounded-2xl border ${scoreClass(item.score)}`}
+          >
+            <ScoreRing score={item.score} size={80} stroke={6} textSizeClass="text-xl" />
+            <span className="text-sm font-semibold mt-3 text-foreground">{item.label}</span>
+          </div>
+        ))}
+      </div>
 
-      {started && mutation.isPending && (
-        <div className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
-          <Loader2 className="h-4 w-4 animate-spin text-primary" /> Analysing your report…
-        </div>
-      )}
-
-      {mutation.data && !mutation.data.ok && (
-        <p className="mt-4 text-sm text-destructive">{mutation.data.error}</p>
-      )}
-
-      {mutation.data && mutation.data.ok && (
-        <div className="mt-4 space-y-4">
-          {mutation.data.summary && <p className="text-sm">{mutation.data.summary}</p>}
-          <ol className="space-y-3">
-            {mutation.data.steps?.map((step, i) => (
-              <li key={i} className="rounded-xl border border-border bg-background p-4">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="font-medium">
-                    {i + 1}. {step.title}
-                  </span>
-                  <span
-                    className={`rounded-full px-2 py-0.5 text-[10px] uppercase tracking-wide ${PRIORITY_STYLE[step.priority] ?? PRIORITY_STYLE.medium}`}
-                  >
-                    {step.priority}
-                  </span>
-                </div>
-                <p className="mt-1 text-sm text-muted-foreground">{step.detail}</p>
-              </li>
-            ))}
-          </ol>
-        </div>
-      )}
+      {/* Core Metrics */}
+      <div className="grid gap-3 grid-cols-2 sm:grid-cols-3">
+        {[
+          {
+            label: "First Contentful Paint (FCP)",
+            val: metrics.fcp.value,
+            score: metrics.fcp.score,
+          },
+          {
+            label: "Largest Contentful Paint (LCP)",
+            val: metrics.lcp.value,
+            score: metrics.lcp.score,
+          },
+          {
+            label: "Cumulative Layout Shift (CLS)",
+            val: metrics.cls.value,
+            score: metrics.cls.score,
+          },
+          { label: "Total Blocking Time (TBT)", val: metrics.tbt.value, score: metrics.tbt.score },
+          { label: "Speed Index", val: metrics.speedIndex.value, score: metrics.speedIndex.score },
+          {
+            label: "Time to Interactive (TTI)",
+            val: metrics.interactive.value,
+            score: metrics.interactive.score,
+          },
+        ].map((m) => (
+          <div
+            key={m.label}
+            className="rounded-xl border border-border bg-background p-4 flex flex-col justify-between"
+          >
+            <span className="text-xs text-muted-foreground font-medium">{m.label}</span>
+            <span className={`text-xl font-bold mt-2 ${metricClass(m.score)}`}>{m.val}</span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

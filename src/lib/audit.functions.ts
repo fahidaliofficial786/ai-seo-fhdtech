@@ -148,16 +148,55 @@ export const auditWebsite = createServerFn({ method: "POST" })
       // Fallback to url
     }
 
-    // Side resources
-    const [robotsRes, sitemapRes, llmsRes] = await Promise.all([
+    // Side resources & PageSpeed API
+    const keySuffix = process.env.PAGESPEED_API_KEY ? `&key=${process.env.PAGESPEED_API_KEY}` : "";
+    const psiUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(finalUrl)}&category=performance&category=accessibility&category=seo&category=best-practices${keySuffix}`;
+
+    const [robotsRes, sitemapRes, llmsRes, psiRes] = await Promise.all([
       safeFetch(origin + "/robots.txt", 6000),
       safeFetch(origin + "/sitemap.xml", 6000),
       safeFetch(origin + "/llms.txt", 6000),
+      fetch(psiUrl).catch(() => null),
     ]);
+
     const robotsTxt = robotsRes && robotsRes.ok ? await robotsRes.text().catch(() => "") : "";
     base.hasRobots = !!(robotsRes && robotsRes.ok);
     base.hasSitemap = !!(sitemapRes && sitemapRes.ok);
     base.hasLlmsTxt = !!(llmsRes && llmsRes.ok);
+
+    let pageSpeed: any = undefined;
+    if (psiRes && psiRes.ok) {
+      try {
+        const psiJson = await psiRes.json();
+        const lh = psiJson?.lighthouseResult;
+        if (lh) {
+          const scoreVal = (catId: string) =>
+            Math.round((lh.categories?.[catId]?.score || 0) * 100);
+          const auditVal = (audId: string) => ({
+            value: lh.audits?.[audId]?.displayValue || "—",
+            score: lh.audits?.[audId]?.score === null ? 1 : (lh.audits?.[audId]?.score ?? 0),
+          });
+          pageSpeed = {
+            scores: {
+              performance: scoreVal("performance"),
+              accessibility: scoreVal("accessibility"),
+              bestPractices: scoreVal("best-practices"),
+              seo: scoreVal("seo"),
+            },
+            metrics: {
+              fcp: auditVal("first-contentful-paint"),
+              lcp: auditVal("largest-contentful-paint"),
+              cls: auditVal("cumulative-layout-shift"),
+              tbt: auditVal("total-blocking-time"),
+              speedIndex: auditVal("speed-index"),
+              interactive: auditVal("interactive"),
+            },
+          };
+        }
+      } catch (e) {
+        console.error("Failed to parse PageSpeed JSON", e);
+      }
+    }
 
     const head = (html.match(/<head[\s\S]*?<\/head>/i) || [""])[0];
     const bodyText = html
@@ -879,10 +918,38 @@ export const auditWebsite = createServerFn({ method: "POST" })
     const warnings = allChecks.filter((c) => c.status === "warn").length;
     const passed = allChecks.filter((c) => c.status === "pass").length;
 
-    const totalWeight = categories.reduce((a, c) => a + c.weight, 0);
-    const overallScore = Math.round(
-      categories.reduce((a, c) => a + c.score * c.weight, 0) / totalWeight,
+    let overallScore = Math.round(
+      categories.reduce((a, c) => a + c.score * c.weight, 0) /
+        categories.reduce((a, c) => a + c.weight, 0),
     );
+
+    if (pageSpeed) {
+      // Overwrite the category scores with actual Lighthouse scores
+      const perfCat = categories.find((c) => c.id === "performance");
+      if (perfCat) perfCat.score = pageSpeed.scores.performance;
+
+      const accessCat = categories.find((c) => c.id === "accessibility");
+      if (accessCat) accessCat.score = pageSpeed.scores.accessibility;
+
+      const seoCat = categories.find((c) => c.id === "onpage");
+      if (seoCat) seoCat.score = pageSpeed.scores.seo;
+
+      const techCat = categories.find((c) => c.id === "technical");
+      if (techCat)
+        techCat.score = Math.round((pageSpeed.scores.seo + pageSpeed.scores.bestPractices) / 2);
+
+      const secCat = categories.find((c) => c.id === "security");
+      if (secCat) secCat.score = pageSpeed.scores.bestPractices;
+
+      // Re-calculate overall score based on real Lighthouse categories
+      overallScore = Math.round(
+        (pageSpeed.scores.performance +
+          pageSpeed.scores.accessibility +
+          pageSpeed.scores.bestPractices +
+          pageSpeed.scores.seo) /
+          4,
+      );
+    }
 
     return {
       url,
@@ -907,5 +974,6 @@ export const auditWebsite = createServerFn({ method: "POST" })
       images,
       extractedLinks,
       keywordAnalysis,
+      pageSpeed,
     };
   });

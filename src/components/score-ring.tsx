@@ -3,6 +3,7 @@ interface ScoreRingProps {
   size?: number;
   stroke?: number;
   label?: string;
+  textSizeClass?: string;
 }
 
 function colorFor(score: number) {
@@ -12,7 +13,13 @@ function colorFor(score: number) {
   return "var(--destructive)";
 }
 
-export function ScoreRing({ score, size = 160, stroke = 12, label }: ScoreRingProps) {
+export function ScoreRing({
+  score,
+  size = 160,
+  stroke = 12,
+  label,
+  textSizeClass,
+}: ScoreRingProps) {
   const r = (size - stroke) / 2;
   const c = 2 * Math.PI * r;
   const offset = c - (Math.min(100, Math.max(0, score)) / 100) * c;
@@ -44,7 +51,7 @@ export function ScoreRing({ score, size = 160, stroke = 12, label }: ScoreRingPr
         />
       </svg>
       <div className="absolute flex flex-col items-center">
-        <span className="text-4xl font-bold tracking-tight">{score}</span>
+        <span className={`${textSizeClass || "text-4xl"} font-bold tracking-tight`}>{score}</span>
         {label && <span className="text-xs text-muted-foreground">{label}</span>}
       </div>
     </div>
