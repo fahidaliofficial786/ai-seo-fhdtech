@@ -87,6 +87,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Audit, analyze, monitor & optimize the SEO of AI-generated websites built with Lovable, Bolt, V0, Cursor, Replit, Vercel & more. 100+ SEO, AI, technical, performance, security & accessibility checks.",
       },
       { name: "author", content: "FHDTech" },
+      { name: "google-site-verification", content: "TIduYcPBN-HzvBfSB3Ndy4UAF7Qv07xPvdNrnxpJiRU" },
       { property: "og:title", content: "AI SEO Audit Platform — FHDTech" },
       {
         property: "og:description",
