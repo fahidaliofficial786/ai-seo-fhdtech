@@ -1,11 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { CheckCircle2, Zap } from "lucide-react";
 import { PageShell } from "@/components/page-shell";
 import { ScanForm } from "@/components/scan-form";
@@ -189,42 +183,36 @@ function Checklist() {
           </div>
         </div>
 
-        {/* Detailed Accordion Drops */}
-        <div className="space-y-4">
-          <h2 className="text-2xl font-bold">Audit Checks Breakdown</h2>
-          <Accordion type="multiple" className="border-t border-border">
-            {CHECKLIST.map((g) => (
-              <AccordionItem key={g.group} value={g.group}>
-                <AccordionTrigger className="text-left text-base font-semibold py-4">
-                  <span>
-                    {g.group}{" "}
-                    <span className="ml-2 text-xs font-normal text-muted-foreground">
-                      ({g.items.length} checks)
-                    </span>
-                  </span>
-                </AccordionTrigger>
-                <AccordionContent className="pt-2 pb-6">
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    {g.items.map((i) => (
-                      <div
-                        key={i}
-                        className="rounded-xl border border-border bg-card/25 p-4 flex flex-col justify-start gap-1"
-                      >
-                        <div className="flex items-center gap-2 font-semibold text-sm text-foreground">
-                          <CheckCircle2 className="h-4 w-4 shrink-0 text-chart-3" />
-                          <span>{i}</span>
-                        </div>
-                        <p className="text-xs text-muted-foreground pl-6 leading-relaxed">
-                          {DESCRIPTIONS[i] ||
-                            "Comprehensive check for layout and quality compliance."}
-                        </p>
-                      </div>
-                    ))}
+        {/* Detailed Checks Breakdown (Fully Open) */}
+        <div className="space-y-12">
+          <h2 className="text-3xl font-bold border-b border-border pb-4">Audit Checks Breakdown</h2>
+          {CHECKLIST.map((g) => (
+            <div key={g.group} className="space-y-4">
+              <h3 className="text-xl font-bold flex items-center gap-2 text-foreground">
+                <span className="h-2 w-2 rounded-full bg-primary" />
+                {g.group}{" "}
+                <span className="text-xs font-normal text-muted-foreground">
+                  ({g.items.length} checks)
+                </span>
+              </h3>
+              <div className="grid gap-4 sm:grid-cols-2">
+                {g.items.map((i) => (
+                  <div
+                    key={i}
+                    className="rounded-2xl border border-border bg-card/40 p-5 flex flex-col justify-start gap-1.5 hover:border-primary/20 transition-colors"
+                  >
+                    <div className="flex items-center gap-2.5 font-bold text-sm text-foreground">
+                      <CheckCircle2 className="h-4.5 w-4.5 shrink-0 text-chart-3" />
+                      <span>{i}</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground pl-7 leading-relaxed font-normal">
+                      {DESCRIPTIONS[i] || "Comprehensive check for layout and quality compliance."}
+                    </p>
                   </div>
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* AI Copilot Prompt Copy Section */}
